@@ -1,8 +1,9 @@
 🐳 Docker Compose
-Este projeto utiliza Docker Compose para orquestrar um ambiente com três microsserviços Spring Boot (usermicroservice, salamicroservice e reservamicroservice), cada um com seu respectivo banco de dados PostgreSQL. Também é incluído o Adminer, uma interface web para visualização e gerenciamento dos bancos de dados.
-
+Este projeto utiliza Docker Compose para orquestrar um ambiente com três microsserviços Spring Boot (usermicroservice, salamicroservice e reservamicroservice), cada um com seu respectivo banco de dados PostgreSQL. 
+Também é incluído o Adminer, uma interface web para visualização e gerenciamento dos bancos de dados.
 Cada serviço está isolado em containers e se comunica através de uma rede interna chamada microServicesNet. Os dados dos bancos são persistidos usando volumes Docker.
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Comandos para rodar o projeto:
 
 # docker-compose up -d
