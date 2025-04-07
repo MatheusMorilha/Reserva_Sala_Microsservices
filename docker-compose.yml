@@ -1,0 +1,101 @@
+version: "3.8"
+services:
+  usermicroservice:
+    build: user
+    ports:
+      - "8081:8081"
+    depends_on:
+      - dbuser
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbuser:5432/usersdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - microServicesNet
+
+  salamicroservice:
+    build: sala
+    ports:
+      - "8082:8082"
+    depends_on:
+      - dbsala
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbsala:5432/salasdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - microServicesNet
+
+  reservamicroservice:
+    build: reserva
+    ports:
+      - "8083:8083"
+    depends_on:
+      - dbreserva
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbreserva:5432/reservasdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - microServicesNet
+
+  dbuser:
+    image: postgres:15
+    container_name: dbuser
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: usersdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    networks:
+      - microServicesNet
+    volumes:
+      - userdbdata:/var/lib/postgresql/data
+
+  dbsala:
+    image: postgres:15
+    container_name: dbsala
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: salasdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    networks:
+      - microServicesNet
+    volumes:
+      - saladbdata:/var/lib/postgresql/data
+
+  dbreserva:
+    image: postgres:15
+    container_name: dbreserva
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: reservasdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    networks:
+      - microServicesNet
+    volumes:
+      - reservadbdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - microServicesNet
+
+networks:
+  microServicesNet:
+
+volumes:
+  userdbdata:
+  saladbdata:
+  reservadbdata:

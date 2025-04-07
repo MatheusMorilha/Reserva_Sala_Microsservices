@@ -1,0 +1,11 @@
+# Repositório dividido em 3 microsserviços (User, Sala e Reserva).
+# Um banco postgress para cada microserviço.
+# Estrutura montada com base no DDD (Domain-Driven Design)
+
+# 🐳 Docker Compose
+# 
+# 
+# 
+# 
+# 
+# 
