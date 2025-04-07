@@ -8,6 +8,6 @@ RUN mvn clean package -DskipTests
 # Etapa 2: Imagem final com a aplicação
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/reservaMicroService*.jar /app/reservaMicroService.jar
+COPY --from=build /app/target/reserva*.jar /app/reserva.jar
 EXPOSE 8083
-ENTRYPOINT ["java", "-jar", "reservaMicroService.jar"]
+ENTRYPOINT ["java", "-jar", "reserva.jar"]

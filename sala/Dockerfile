@@ -8,6 +8,6 @@ RUN mvn clean package -DskipTests
 # Etapa 2: Imagem final com a aplicação
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/salaMicroService*.jar /app/salaMicroService.jar
+COPY --from=build /app/target/sala*.jar /app/sala.jar
 EXPOSE 8082
-ENTRYPOINT ["java", "-jar", "salaMicroService.jar"]
+ENTRYPOINT ["java", "-jar", "sala.jar"]
