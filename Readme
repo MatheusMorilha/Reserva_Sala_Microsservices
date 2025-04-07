@@ -1,11 +1,17 @@
-# Repositório dividido em 3 microsserviços (User, Sala e Reserva).
-# Um banco postgress para cada microserviço.
-# Estrutura montada com base no DDD (Domain-Driven Design)
+🐳 Docker Compose
+Este projeto utiliza Docker Compose para orquestrar um ambiente com três microsserviços Spring Boot (usermicroservice, salamicroservice e reservamicroservice), cada um com seu respectivo banco de dados PostgreSQL. Também é incluído o Adminer, uma interface web para visualização e gerenciamento dos bancos de dados.
 
-# 🐳 Docker Compose
-# 
-# 
-# 
-# 
-# 
-# 
+Cada serviço está isolado em containers e se comunica através de uma rede interna chamada microServicesNet. Os dados dos bancos são persistidos usando volumes Docker.
+
+Comandos para rodar o projeto:
+
+# docker-compose up -d
+
+Cadastrar uma sala (Postman):
+
+POST: http://localhost:8082/salas
+{
+  "nome": "Sala 01",
+  "capacidade": 10
+}
+
