@@ -1,4 +1,4 @@
-package com.UserMicroService.demo.application.model;
+package com.UserMicroService.demo.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

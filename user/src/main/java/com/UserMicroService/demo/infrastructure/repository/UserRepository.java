@@ -1,7 +1,8 @@
 package com.UserMicroService.demo.infrastructure.repository;
 
-import com.UserMicroService.demo.application.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.UserMicroService.demo.domain.model.User;
 
 import java.util.Optional;
 

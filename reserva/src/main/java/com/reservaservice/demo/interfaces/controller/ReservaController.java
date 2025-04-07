@@ -1,7 +1,8 @@
-package com.reservaservice.demo.infrastructure.controller;
+package com.reservaservice.demo.interfaces.controller;
 
-import com.reservaservice.demo.application.model.Reserva;
 import com.reservaservice.demo.application.service.ReservaService;
+import com.reservaservice.demo.domain.model.Reserva;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

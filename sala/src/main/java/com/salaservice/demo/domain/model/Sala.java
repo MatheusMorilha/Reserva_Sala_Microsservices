@@ -1,21 +1,20 @@
-package com.reservaservice.demo.application.model;
+package com.salaservice.demo.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reserva {
+public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dataHora;
-    private Integer sala_id;
-    private Integer usuario_id;
+    private String nome;
+    private int capacidade;
 }

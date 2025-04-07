@@ -1,6 +1,6 @@
 package com.salaservice.demo.application.service;
 
-import com.salaservice.demo.application.model.Sala;
+import com.salaservice.demo.domain.model.Sala;
 import com.salaservice.demo.infrastructure.repository.SalaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.UserMicroService.demo.application.service;
 
-import com.UserMicroService.demo.application.model.User;
+import com.UserMicroService.demo.domain.model.User;
 import com.UserMicroService.demo.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
