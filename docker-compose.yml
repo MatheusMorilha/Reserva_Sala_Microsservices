@@ -1,6 +1,7 @@
 version: "3.8"
 services:
 
+  # Microserviço de Usuário
   usermicroservice:
     build: user
     ports:
@@ -12,33 +13,9 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - Network1
-
-  salamicroservice:
-    build: sala
-    ports:
-      - "8082:8082"
-    depends_on:
-      - dbsala
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://dbsala:5432/salasdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-    networks:
-      - Network2
-
-  reservamicroservice:
-    build: reserva
-    ports:
-      - "8083:8083"
-    depends_on:
-      - dbreserva
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://dbreserva:5432/reservasdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-    networks:
-      - Network3
+      - usernet
+      - rabbitnet
+      - gatewaynet
 
   dbuser:
     image: postgres:15
@@ -51,9 +28,25 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - Network1
+      - usernet
     volumes:
       - userdbdata:/var/lib/postgresql/data
+
+  # Microserviço de Sala
+  salamicroservice:
+    build: sala
+    ports:
+      - "8082:8082"
+    depends_on:
+      - dbsala
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbsala:5432/salasdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - salanet
+      - rabbitnet
+      - gatewaynet
 
   dbsala:
     image: postgres:15
@@ -66,9 +59,25 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - Network2
+      - salanet
     volumes:
       - saladbdata:/var/lib/postgresql/data
+
+  # Microserviço de Reserva
+  reservamicroservice:
+    build: reserva
+    ports:
+      - "8083:8083"
+    depends_on:
+      - dbreserva
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbreserva:5432/reservasdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    networks:
+      - reservanet
+      - rabbitnet
+      - gatewaynet
 
   dbreserva:
     image: postgres:15
@@ -81,20 +90,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - Network3
+      - reservanet
     volumes:
       - reservadbdata:/var/lib/postgresql/data
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "8085:8080"
-    networks:
-      - Network1
-      - Network2
-      - Network3
-  
+  # Gateway
   gateway:
     build: ./gateway
     ports:
@@ -104,24 +104,40 @@ services:
       - salamicroservice
       - reservamicroservice
     networks:
-      - Network1
-      - Network2
-      - Network3
+      - usernet
+      - salanet
+      - reservanet
+      - gatewaynet
 
+  # RabbitMQ
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"     
-      - "15672:15672"   
+      - "5672:5672"
+      - "15672:15672"
     networks:
-      - Network1
-      - Network2
-      - Network3    
+      - rabbitnet
+      - gatewaynet
+
+  # Adminer
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8085:8080"
+    networks:
+      - usernet
+      - salanet
+      - reservanet
+
 
 networks:
-  Network1:
-  Network2:
-  Network3:
+  usernet:
+  salanet:
+  reservanet:
+  rabbitnet:
+  gatewaynet:
+
 
 volumes:
   userdbdata:

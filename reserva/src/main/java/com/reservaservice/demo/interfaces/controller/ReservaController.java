@@ -31,9 +31,14 @@ public class ReservaController {
     public ResponseEntity<Reserva> criar(@RequestBody Reserva reserva) {
         Reserva savedReserva = reservaService.salvar(reserva);
 
-        // Envia uma mensagem para o RabbitMQ notificando a criação da reserva
-        String mensagem = "Reserva criada com ID: " + savedReserva.getId();
-        reservaProducer.sendReservaMessage(mensagem);
+        try {
+            // Envia mensagem para RabbitMQ notificando a criação da reserva
+            String mensagem = "Reserva criada com ID: " + savedReserva.getId();
+            reservaProducer.sendReservaMessage(mensagem);
+        } catch (Exception e) {
+            // Log do erro, mas não impede a criação da reserva
+            System.err.println("Erro ao enviar mensagem RabbitMQ: " + e.getMessage());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReserva);
     }
