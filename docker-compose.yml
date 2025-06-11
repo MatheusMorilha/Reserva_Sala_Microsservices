@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+
   usermicroservice:
     build: user
     ports:
@@ -11,7 +12,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network1
 
   salamicroservice:
     build: sala
@@ -24,7 +25,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network2
 
   reservamicroservice:
     build: reserva
@@ -37,7 +38,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network3
 
   dbuser:
     image: postgres:15
@@ -50,7 +51,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network1
     volumes:
       - userdbdata:/var/lib/postgresql/data
 
@@ -65,7 +66,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network2
     volumes:
       - saladbdata:/var/lib/postgresql/data
 
@@ -80,7 +81,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - microServicesNet
+      - Network3
     volumes:
       - reservadbdata:/var/lib/postgresql/data
 
@@ -88,12 +89,39 @@ services:
     image: adminer
     restart: always
     ports:
-      - "8080:8080"
+      - "8085:8080"
     networks:
-      - microServicesNet
+      - Network1
+      - Network2
+      - Network3
+  
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - usermicroservice
+      - salamicroservice
+      - reservamicroservice
+    networks:
+      - Network1
+      - Network2
+      - Network3
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"     
+      - "15672:15672"   
+    networks:
+      - Network1
+      - Network2
+      - Network3    
 
 networks:
-  microServicesNet:
+  Network1:
+  Network2:
+  Network3:
 
 volumes:
   userdbdata:

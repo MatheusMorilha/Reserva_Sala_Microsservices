@@ -1,4 +1,4 @@
-package com.reservaservice.demo.domain.model;
+package com.reservaservice.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
