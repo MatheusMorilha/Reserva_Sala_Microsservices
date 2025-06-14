@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
 
   # Microserviço de Usuário
@@ -8,14 +9,15 @@ services:
       - "8081:8081"
     depends_on:
       - dbuser
+      - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://dbuser:5432/usersdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - usernet
-      - rabbitnet
-      - gatewaynet
+      - usernet       
+      - rabbitnet     
+      - gatewaynet    
 
   dbuser:
     image: postgres:15
@@ -28,7 +30,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - usernet
+      - usernet       
     volumes:
       - userdbdata:/var/lib/postgresql/data
 
@@ -39,14 +41,15 @@ services:
       - "8082:8082"
     depends_on:
       - dbsala
+      - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://dbsala:5432/salasdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - salanet
-      - rabbitnet
-      - gatewaynet
+      - salanet       
+      - rabbitnet     
+      - gatewaynet    
 
   dbsala:
     image: postgres:15
@@ -59,7 +62,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - salanet
+      - salanet       
     volumes:
       - saladbdata:/var/lib/postgresql/data
 
@@ -70,14 +73,15 @@ services:
       - "8083:8083"
     depends_on:
       - dbreserva
+      - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://dbreserva:5432/reservasdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     networks:
-      - reservanet
-      - rabbitnet
-      - gatewaynet
+      - reservanet    
+      - rabbitnet     
+      - gatewaynet    
 
   dbreserva:
     image: postgres:15
@@ -90,13 +94,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     networks:
-      - reservanet
+      - reservanet    
     volumes:
       - reservadbdata:/var/lib/postgresql/data
 
   # Gateway
   gateway:
-    build: ./gateway
+    build: gateway
     ports:
       - "8080:8080"
     depends_on:
@@ -104,10 +108,10 @@ services:
       - salamicroservice
       - reservamicroservice
     networks:
-      - usernet
-      - salanet
-      - reservanet
-      - gatewaynet
+      - gatewaynet    
+      - usernet       
+      - salanet       
+      - reservanet    
 
   # RabbitMQ
   rabbitmq:
@@ -116,8 +120,10 @@ services:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - rabbitnet
-      - gatewaynet
+      - rabbitnet     
+      - usernet       
+      - salanet       
+      - reservanet   
 
   # Adminer
   adminer:
@@ -126,18 +132,14 @@ services:
     ports:
       - "8085:8080"
     networks:
-      - usernet
-      - salanet
-      - reservanet
-
+      - gatewaynet 
 
 networks:
-  usernet:
-  salanet:
-  reservanet:
-  rabbitnet:
-  gatewaynet:
-
+  gatewaynet:   
+  rabbitnet:    
+  usernet:      
+  salanet:      
+  reservanet:   
 
 volumes:
   userdbdata:
